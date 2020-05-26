@@ -4,11 +4,12 @@ const prompt = (message) => {
   console.log(`=> ${message}`);
 };
 
-function invalidNumber(number) {
+function isInvalidNumber(number) {
   return (
-    number.trimStart() === "" ||
-    Number.isNaN(Number(number)) ||
-    Number(number) < 0
+    number.trim() === "" ||
+    Number(number) < 0 ||
+    Number(number) === 0 ||
+    Number.isNaN(Number(number))
   );
 }
 
@@ -22,7 +23,7 @@ do {
 
   let loanAmount = readline.question();
 
-  while (invalidNumber(loanAmount)) {
+  while (isInvalidNumber(loanAmount)) {
     prompt("Hmm... that doesn't look like a valid number.");
     loanAmount = readline.question();
   }
@@ -31,43 +32,42 @@ do {
 
   let apr = readline.question();
 
-  while (invalidNumber(apr)) {
+  while (isInvalidNumber(apr)) {
     prompt("Hmm... that doesn't look like a valid number.");
     apr = readline.question();
   }
 
-  prompt("Please enter the loan duration: ");
+  prompt("Please enter the loan duration (in years): ");
 
   let loanDuration = readline.question();
 
-  while (invalidNumber(loanDuration)) {
+  while (isInvalidNumber(loanDuration)) {
     prompt("Hmm... that doesn't look like a valid number.");
     loanDuration = readline.question();
   }
 
-  let monthlyInterestRate = Number(apr) / 100 / 12;
-  let loanDurationMonths = Number(loanDuration) * 12;
+  const calculateMortgage = () => {
+    let monthlyInterestRate = Number(apr) / 100 / 12;
+    let loanDurationMonths = loanDuration * 12;
 
-  const mortgageCalculator = () => {
-    //Create a variable to calculate loan duration in months
-    let motgageAmount =
+    let mortgageAmount =
       Number(loanAmount) *
       (monthlyInterestRate /
         (1 - Math.pow(1 + monthlyInterestRate, -Number(loanDurationMonths))));
-    return motgageAmount;
+    return mortgageAmount;
   };
 
-  let result = mortgageCalculator();
+  let result = calculateMortgage();
   console.log(`Your Mortgage Payment is: $${result.toFixed(2)}`);
 
   prompt("Would you like to do another calculation?");
   let answer = readline.question().toLowerCase();
-  while (answer[0] !== "n" && answer[0] !== "y") {
-    prompt('Please enter "y" or "n".');
+  while (answer !== "no" && answer !== "yes") {
+    prompt("Please enter only 'yes' or 'no': ");
     answer = readline.question().toLowerCase();
   }
 
-  if (answer[0] === "n") {
+  if (answer === "no") {
     anotherCalculation = false;
     return;
   }

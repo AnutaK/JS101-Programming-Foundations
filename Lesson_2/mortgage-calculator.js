@@ -18,33 +18,26 @@ let anotherCalculation = true;
 prompt("Welcome to Mortgage Calculator!");
 console.log("**********************************");
 
-do {
-  prompt("Please enter your loan amount: ");
-
-  let loanAmount = readline.question();
-
-  while (isInvalidNumber(loanAmount)) {
-    prompt("Hmm... that doesn't look like a valid number.");
-    loanAmount = readline.question();
+let retrieveInput = (input, validInput) => {
+  while (validInput(input)) {
+    prompt("Hmm... that doesn't look like a valid number");
+    input = readline.question();
   }
+  return input;
+};
+
+do {
+  prompt("PLease enter your Loan Amount: ");
+  let loanAmount = readline.question();
+  retrieveInput(loanAmount, isInvalidNumber);
 
   prompt("PLease enter the Annual Percentage Rate (APR): ");
-
   let apr = readline.question();
-
-  while (isInvalidNumber(apr)) {
-    prompt("Hmm... that doesn't look like a valid number.");
-    apr = readline.question();
-  }
+  retrieveInput(apr, isInvalidNumber);
 
   prompt("Please enter the loan duration (in years): ");
-
   let loanDuration = readline.question();
-
-  while (isInvalidNumber(loanDuration)) {
-    prompt("Hmm... that doesn't look like a valid number.");
-    loanDuration = readline.question();
-  }
+  retrieveInput(loanDuration, isInvalidNumber);
 
   const calculateMortgage = () => {
     let monthlyInterestRate = Number(apr) / 100 / 12;

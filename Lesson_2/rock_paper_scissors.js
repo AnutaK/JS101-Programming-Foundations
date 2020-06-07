@@ -1,5 +1,5 @@
 const readline = require("readline-sync");
-const VALID_CHOICES = ["rock", "paper", "scissors"];
+const VALID_CHOICES = ["rock", "paper", "scissors", "lizard", "spock"];
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -9,12 +9,16 @@ function displayWinner(choice, computerChoice) {
   prompt(`You chose ${choice}, computer chose ${computerChoice}`);
 
   if (
-    (choice === "rock" && computerChoice === "scissors") ||
+    (choice === "rock" && computerChoice === "lizard") ||
+    (choice === "lizard" && computerChoice === "spock") ||
     (choice === "paper" && computerChoice === "rock") ||
-    (choice === "scissors" && computerChoice === "paper")
+    (choice === "scissors" && computerChoice === "paper") ||
+    (choice === "paper" && computerChoice === "spock")
   ) {
     prompt("You win!");
   } else if (
+    (choice === "spock" && computerChoice === "lizard") ||
+    (choice === "lizard" && computerChoice === "rock") ||
     (choice === "rock" && computerChoice === "paper") ||
     (choice === "paper" && computerChoice === "scissors") ||
     (choice === "scissors" && computerChoice === "rock")

@@ -3,6 +3,7 @@ const readline = require("readline-sync");
 const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
+const SCORE = 5;
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -34,7 +35,6 @@ function initializeBoard() {
   for (let square = 1; square <= 9; square++) {
     board[String(square)] = INITIAL_MARKER;
   }
-
   return board;
 }
 
@@ -62,7 +62,7 @@ function playerChoosesSquare(board) {
   let square;
 
   while (true) {
-    prompt(`Choose a square (${emptySquares(board).join(", ")}):`);
+    prompt(`Choose a square: ${joinOr(emptySquares(board))}`);
     square = readline.question().trim();
     if (emptySquares(board).includes(square)) break;
 
@@ -85,6 +85,13 @@ function boardFull(board) {
 function someoneWon(board) {
   return !!detectWinner(board);
 }
+
+function someoneWonMatch(player) {
+  let userScore = 0;
+  let computerScore = 0;
+  return player === "Player" ? ++userScore : ++computerScore;
+}
+
 while (true) {
   let board = initializeBoard();
 
@@ -102,6 +109,11 @@ while (true) {
 
   if (someoneWon(board)) {
     prompt(`${detectWinner(board)} won!`);
+    prompt(
+      `${detectWinner(board)}'s score is ${someoneWonMatch(
+        detectWinner(board)
+      )}`
+    );
   } else {
     prompt("It's a tie!");
   }

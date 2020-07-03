@@ -3,7 +3,9 @@ const readline = require("readline-sync");
 const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
-const SCORE = 5;
+const MATCH_POINTS = 5;
+
+const score = { player: 0, comp: 0 };
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -11,8 +13,7 @@ function prompt(msg) {
 
 function displayBoard(board) {
   console.clear();
-
-  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
+  console.log(`${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log("");
   console.log("     |     |");
@@ -86,11 +87,13 @@ function someoneWon(board) {
   return !!detectWinner(board);
 }
 
-function someoneWonMatch(player) {
-  let userScore = 0;
-  let computerScore = 0;
-  return player === "Player" ? ++userScore : ++computerScore;
-}
+const isSomeoneWonMatch = (score) => {
+  return score.player === MATCH_POINTS || score.comp === MATCH_POINTS;
+};
+
+const incrementScore = (board) => {
+  return detectWinner(board) === "Player" ? score.player++ : score.comp++;
+};
 
 while (true) {
   let board = initializeBoard();
@@ -109,13 +112,15 @@ while (true) {
 
   if (someoneWon(board)) {
     prompt(`${detectWinner(board)} won!`);
-    prompt(
-      `${detectWinner(board)}'s score is ${someoneWonMatch(
-        detectWinner(board)
-      )}`
-    );
+    incrementScore(board);
   } else {
     prompt("It's a tie!");
+  }
+
+  if (isSomeoneWonMatch(score)) {
+    prompt(`${detectWinner(board)} won the match!`);
+    score.player = 0;
+    score.comp = 0;
   }
 
   prompt("Play again? (y or n)");

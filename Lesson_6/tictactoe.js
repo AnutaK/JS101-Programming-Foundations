@@ -17,18 +17,6 @@ const WINNING_LINES = [
 ];
 const score = { player: 0, comp: 0 };
 
-function chooseWhoPlaysFirst() {
-  let answer;
-  prompt(`Choose who gets to play first! (user/computer/random)`);
-  answer = readline.question().trim();
-
-  while (!VALID_PLAYERS.includes(answer)) {
-    prompt("Sorry, that's not a valid choice.");
-    answer = readline.question().trim();
-  }
-}
-chooseWhoPlaysFirst();
-
 function prompt(msg) {
   console.log(`=> ${msg}`);
 }
@@ -59,6 +47,33 @@ function initializeBoard() {
     board[String(square)] = INITIAL_MARKER;
   }
   return board;
+}
+
+function chooseWhoPlaysFirst(board) {
+  let answer;
+  let firstTimePlayer;
+
+  prompt(`Choose who gets to play first! (user/computer/random)`);
+  answer = readline.question().trim();
+
+  while (!VALID_PLAYERS.includes(answer)) {
+    prompt("Sorry, that's not a valid choice.");
+    answer = readline.question().trim();
+  }
+
+  switch (answer) {
+    case "user":
+      playerChoosesSquare(board);
+      firstTimePlayer = "user";
+      break;
+
+    case "computer":
+      computerChoosesSquare(board);
+      firstTimePlayer = "computer";
+      break;
+  }
+
+  return firstTimePlayer;
 }
 
 function emptySquares(board) {
@@ -152,21 +167,23 @@ function findAtRiskSquare(line, board, marker) {
       return unusedSquare;
     }
   }
-
   return null;
 }
 
+//TicTacToe game
 while (true) {
   let board = initializeBoard();
+  chooseWhoPlaysFirst(board);
 
   while (true) {
     displayBoard(board);
-
-    playerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
-
-    computerChoosesSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
+    if (chooseWhoPlaysFirst(board) === "user") {
+      computerChoosesSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+    } else {
+      playerChoosesSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+    }
   }
 
   displayBoard(board);

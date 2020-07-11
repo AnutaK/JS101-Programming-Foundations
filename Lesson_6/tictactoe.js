@@ -176,8 +176,8 @@ while (true) {
       computerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
+    currentPlayer = alternatePlayer(currentPlayer);
   }
-  currentPlayer = alternatePlayer(currentPlayer);
 
   displayBoard(board);
 
@@ -194,8 +194,12 @@ while (true) {
     score.comp = 0;
   }
 
-  prompt("Play again? (y or n)");
-  let answer = readline.question().toLowerCase()[0];
+  prompt("Do you want to play again (y/n)?");
+  let answer = readline.question().toLowerCase();
+  while (answer !== "n" && answer !== "y") {
+    prompt('Please enter "y" or "n".');
+    answer = readline.question().toLowerCase();
+  }
   if (answer !== "y") break;
 }
 

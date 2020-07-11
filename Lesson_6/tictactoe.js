@@ -4,7 +4,7 @@ const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
 const MATCH_POINTS = 5;
-const VALID_PLAYERS = ["user", "computer", "random"];
+const VALID_PLAYERS = ["user", "computer"];
 const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -49,32 +49,24 @@ function initializeBoard() {
   return board;
 }
 
-function chooseWhoPlaysFirst(board) {
+// this function only returns a string user/computer
+function chooseWhoPlaysFirst() {
   let answer;
-  let firstTimePlayer;
 
-  prompt(`Choose who gets to play first! (user/computer/random)`);
+  prompt(`Choose who gets to play first! (user/computer)`);
   answer = readline.question().trim();
 
   while (!VALID_PLAYERS.includes(answer)) {
     prompt("Sorry, that's not a valid choice.");
     answer = readline.question().trim();
   }
-
-  switch (answer) {
-    case "user":
-      playerChoosesSquare(board);
-      firstTimePlayer = "user";
-      break;
-
-    case "computer":
-      computerChoosesSquare(board);
-      firstTimePlayer = "computer";
-      break;
-  }
-
-  return firstTimePlayer;
+  return answer;
 }
+
+// this function just alternates player
+const alternatePlayer = (currentPlayer) => {
+  return currentPlayer === "user" ? "computer" : "user";
+};
 
 function emptySquares(board) {
   return Object.keys(board).filter((key) => board[key] === " ");
@@ -173,18 +165,19 @@ function findAtRiskSquare(line, board, marker) {
 //TicTacToe game
 while (true) {
   let board = initializeBoard();
-  chooseWhoPlaysFirst(board);
+  let currentPlayer = chooseWhoPlaysFirst(board);
 
   while (true) {
     displayBoard(board);
-    if (chooseWhoPlaysFirst(board) === "user") {
-      computerChoosesSquare(board);
+    if (currentPlayer === "user") {
+      playerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     } else {
-      playerChoosesSquare(board);
+      computerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
   }
+  currentPlayer = alternatePlayer(currentPlayer);
 
   displayBoard(board);
 

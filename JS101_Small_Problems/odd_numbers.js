@@ -11,13 +11,13 @@
 // - no data structure
 
 // Algorithm:
-//  - loop over numbers from 1 to 99
-//  - determine which numbers are odd
-//  - if it is, print it out to the console
+//  - loop over numbers from 1 to 99, inclusive
+//  - if the number is odd, meaning that when divided by 2, the remainder is > 0,
+// print the number to the console
 
 const allOdd = () => {
-  for (let i = 1; i <= 99; i++) {
-    if (i % 2 === 1) console.log(i);
+  for (let i = 1; i < 100; i += 2) {
+    console.log(i);
   }
 };
 

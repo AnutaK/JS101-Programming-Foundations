@@ -6,7 +6,7 @@
 //take an integer's absolute value and return true if that value is odd.
 
 const isOdd = (integer) => {
-  return Math.abs(integer) % 2 !== 0;
+  return Math.abs(integer) % 2 === 1;
 };
 
 console.log(isOdd(2)); // => false
